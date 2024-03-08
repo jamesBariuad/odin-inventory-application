@@ -7,7 +7,7 @@ const ProductSchema = new Schema({
     price:{type:Number, required:true},
     description:{type:String, required:true},
     numberInStock:{type:Number, required:true},
-    category:[{type: Schema.Types.ObjectId, ref:"Category"}]
+    category:{type: Schema.Types.ObjectId, ref:"Category"}
 }) 
 
 
