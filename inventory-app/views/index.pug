@@ -1,5 +1,11 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div.container-fluid.px-4.py-2
+    h1= title
+    p Welcome to Inventory App! An app inspired by the express local library and a project which is a part of the nodejs course in The Odin Project.
+
+    p Here are the following records currently in the inventory:
+      ul 
+        li #[strong Products:] !{numberOfProducts}
+        li #[strong Categories:] !{numberOfCategories}

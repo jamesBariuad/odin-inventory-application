@@ -12,7 +12,7 @@ const app = express();
 const mongoose = require("mongoose")
 mongoose.set("strictQuery", false);
 
-const mongoDB = "mongodb://127.0.0.1/my_database";
+const mongoDB = "mongodb+srv://jamesbariuad:Ht05bVJ0SqwncebM@cluster0.pgsnec8.mongodb.net/inventory?retryWrites=true&w=majority&appName=Cluster0";
 main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
