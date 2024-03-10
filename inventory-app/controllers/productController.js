@@ -18,11 +18,18 @@ exports.index= asyncHandler(async(req,res,next)=>{
 
 //display all products
 exports.productList = asyncHandler(async(req,res,next)=>{
-    res.send("not implemented yet")
+    const allProducts = await Product.find().exec()
+
+    res.render("productList",{
+        title: "All Products",
+        allProducts:allProducts
+    })
 })
 
 //display detail of a specific product
 exports.productDetails = asyncHandler(async(req,res,next)=>{
+    const chosenProductDetails = await Product.find({_id:req.params.id}).populate("category")
+    console.log(chosenProductDetails)
     res.send("not implementde product detail")
 })
 

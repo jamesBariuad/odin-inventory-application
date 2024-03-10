@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1= title
+    if allProducts 
+        ul
+            each product in allProducts
+                li 
+                    a(href=product.url) #{product.name}
+
+    else 
+        p There are no products.
+        a(href='/inventory/product/create') Create one

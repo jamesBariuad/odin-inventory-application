@@ -11,23 +11,23 @@ html
       block nav
         .navbar.navbar-expand-lg.bg-body-tertiary.p-3
           .container-fluid
-            a.navbar-brand(href='#') Inventory
+            a.navbar-brand(href='/inventory') Inventory
             button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNavDropdown', aria-controls='navbarNavDropdown', aria-expanded='false', aria-label='Toggle navigation')
               span.navbar-toggler-icon
             .collapse.navbar-collapse#navbarNavDropdown
               ul.navbar-nav
                 li.nav-item
-                  a.nav-link.active(aria-current='page', href='#') Home
+                  a.nav-link.active(aria-current='page', href='/inventory') Home
                 li.nav-item
-                  a.nav-link(href='#') Products
+                  a.nav-link(href='/inventory/products') Products
                 li.nav-item
-                  a.nav-link(href='#') Categories
+                  a.nav-link(href='/inventory/categories') Categories
                 li.nav-item.dropdown
                   a.nav-link.dropdown-toggle(href='#', role='button', data-bs-toggle='dropdown', aria-expanded='false') Create
                   ul.dropdown-menu
                     li
-                      a.dropdown-item(href='#') Product
+                      a.dropdown-item(href='inventory/product/create') Product
                     li
-                      a.dropdown-item(href='#') Category
-
-      block content
+                      a.dropdown-item(href='inventory/category/create') Category
+      div.container-fluid.px-4.py-2
+        block content
