@@ -1,0 +1,39 @@
+extends layout 
+
+block content 
+    h1 Add a Product 
+
+        //-     const ProductSchema = new Schema({
+        //-     name:{type:String, required:true, maxLength:100},
+        //-     price:{type:Number, required:true},
+        //-     description:{type:String, required:true},
+        //-     numberInStock:{type:Number, required:true},
+        //-     category:{type: Schema.Types.ObjectId, ref:"Category"}
+        //- }) 
+
+    form(method="post")
+        div.form-group
+
+            label.mb-1(for="name") Name: 
+            input#name.mb-2.form-control(type='text', placeholder='Enter product name', name="name", required, value=(undefined===product?"":product.name)) 
+
+            label.mb-1(for="price") Price in USD:
+            input#price.mb-2.form-control(type='number', min=1, placeholder='Enter price', name="price", required, value=(undefined===product?"":product.price)) 
+
+            label.mb-1(for="description") Description:
+            textarea#description.mb-2.form-control(type='text', placeholder='Enter description', name="description", required, value=(undefined===product?"":product.description))
+
+            label.mb-1(for="numberInStock") Number in Stock:
+            input#numberInStock.mb-2.form-control(type='number', min=0, placeholder='Enter a number', name="numberInStock", required, value=(undefined===product?"":product.numberInStock))
+
+            label.mb-1(for="category") Product Category:
+            select.form-select.mb-5
+                option(selected) Choose a category
+                each category in categoryList 
+                    option(value=category.name) #{category.name}     
+        input.btn.btn-primary(type="submit")
+
+
+
+
+

@@ -38,7 +38,10 @@ exports.productDetails = asyncHandler(async (req, res, next) => {
 
 //display product create form on GET
 exports.productCreateGet = asyncHandler(async (req, res, next) => {
-  res.send("not implementde create on get");
+  const categoryList = await Category.find()
+  console.log(categoryList)
+
+  res.render("productForm", {categoryList:categoryList})
 });
 //handle product create on POST
 exports.productCreatePost = asyncHandler(async (req, res, next) => {
