@@ -1,64 +1,66 @@
-const Product = require("../models/product")
-const Category = require("../models/category")
-const asyncHandler =require('express-async-handler')
+const Product = require("../models/product");
+const Category = require("../models/category");
+const asyncHandler = require("express-async-handler");
 
 //homepage
-exports.index= asyncHandler(async(req,res,next)=>{
-    const [numberOfProducts, numberOfCategories] = await Promise.all([
-        Product.countDocuments({}).exec(),
-        Category.countDocuments({}).exec()
-
-    ])
-    res.render("index", {
-        title: "Inventory App",
-        numberOfProducts: numberOfProducts,
-        numberOfCategories: numberOfCategories
-    })    
-})
+exports.index = asyncHandler(async (req, res, next) => {
+  const [numberOfProducts, numberOfCategories] = await Promise.all([
+    Product.countDocuments({}).exec(),
+    Category.countDocuments({}).exec(),
+  ]);
+  res.render("index", {
+    title: "Inventory App",
+    numberOfProducts: numberOfProducts,
+    numberOfCategories: numberOfCategories,
+  });
+});
 
 //display all products
-exports.productList = asyncHandler(async(req,res,next)=>{
-    const allProducts = await Product.find().exec()
+exports.productList = asyncHandler(async (req, res, next) => {
+  const allProducts = await Product.find().exec();
 
-    res.render("productList",{
-        title: "All Products",
-        allProducts:allProducts
-    })
-})
+  res.render("productList", {
+    title: "All Products",
+    allProducts: allProducts,
+  });
+});
 
 //display detail of a specific product
-exports.productDetails = asyncHandler(async(req,res,next)=>{
-    const chosenProductDetails = await Product.find({_id:req.params.id}).populate("category")
-    console.log(chosenProductDetails)
-    res.send("not implementde product detail")
-})
+exports.productDetails = asyncHandler(async (req, res, next) => {
+  const chosenProductDetails = await Product.findById(req.params.id).populate("category").exec();
+  console.log(chosenProductDetails);
+
+  res.render("productDetails", {
+    title: "Product Details",
+    productDetails: chosenProductDetails
+  });
+});
 
 //display product create form on GET
-exports.productCreateGet = asyncHandler(async(req,res,next)=>{
-    res.send("not implementde create on get")
-})
+exports.productCreateGet = asyncHandler(async (req, res, next) => {
+  res.send("not implementde create on get");
+});
 //handle product create on POST
-exports.productCreatePost = asyncHandler(async(req,res,next)=>{
-    res.send("not implementde create on post")
-})
+exports.productCreatePost = asyncHandler(async (req, res, next) => {
+  res.send("not implementde create on post");
+});
 
 //display product delete form on GET
-exports.productDeleteGet = asyncHandler(async(req,res,next)=>{
-    res.send("not implementde delete on get")
-})
+exports.productDeleteGet = asyncHandler(async (req, res, next) => {
+  res.send("not implementde delete on get");
+});
 
 //handle product delete on POST
-exports.productDeletePost = asyncHandler(async(req,res,next)=>{
-    res.send("not implementde delete on post")
-})
+exports.productDeletePost = asyncHandler(async (req, res, next) => {
+  res.send("not implementde delete on post");
+});
 
 //display product update form on GET
-exports.productUpdateGet = asyncHandler(async(req,res,next)=>{
-    res.send("not implementde update on get")
-})
+exports.productUpdateGet = asyncHandler(async (req, res, next) => {
+  res.send("not implementde update on get");
+});
 
 //handle product update on POST
-exports.productUpdatePost = asyncHandler(async(req,res,next)=>{
-    res.send("not implementde update on post")
-})
-
+exports.productUpdatePost = asyncHandler(async (req, res, next) => {
+  res.send("not implementde update on post");
+});
