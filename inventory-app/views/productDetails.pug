@@ -9,4 +9,6 @@ block content
     p #[strong Category:] 
         a(href=productDetails.category.url) #{productDetails.category.name}
 
-    
+    hr
+    p 
+        a(href=`/inventory/product/${productDetails._id}/delete`) Delete Product 

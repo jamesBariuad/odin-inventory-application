@@ -105,12 +105,17 @@ exports.productCreatePost = [
 
 //display product delete form on GET
 exports.productDeleteGet = asyncHandler(async (req, res, next) => {
-  res.send("not implementde delete on get");
+  const chosenProduct = await Product.findById(req.params.id)
+  res.render("productDeleteForm",{
+    product: chosenProduct
+  })
 });
 
 //handle product delete on POST
 exports.productDeletePost = asyncHandler(async (req, res, next) => {
-  res.send("not implementde delete on post");
+  console.log(req.params.id)
+  await Product.findByIdAndDelete(req.params.id)
+  res.redirect('/inventory/products')
 });
 
 //display product update form on GET

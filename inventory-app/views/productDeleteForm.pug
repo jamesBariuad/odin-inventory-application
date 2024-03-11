@@ -1,0 +1,9 @@
+extends layout 
+
+block content 
+    h1 Delete Product: #{product.name} 
+    p.text-danger #[strong Are you sure you want to delete product?]
+    form(method="POST")
+        div.form-group
+            input#productid(type="hidden", name="productid", value=product._id) 
+        button.btn.btn-danger(type='submit') Delete
