@@ -70,12 +70,22 @@ exports.categoryCreatePost = [
 
 //display category delete form on GET
 exports.categoryDeleteGet = asyncHandler(async (req, res, next) => {
-  res.send("not implementde delete on get");
+  const [productsWithChosenCategory, chosenCategory] = await Promise.all([
+    Products.find({category:req.params.id}),
+    Category.findById(req.params.id)
+  ])
+
+
+    res.render("categoryDeleteForm",{
+      products: productsWithChosenCategory,
+      category: chosenCategory
+    })
 });
 
 //handle category delete on POST
 exports.categoryDeletePost = asyncHandler(async (req, res, next) => {
-  res.send("not implementde delete on post");
+  await Category.findByIdAndDelete(req.params.id)
+  res.redirect("/inventory/categories")
 });
 
 //display category update form on GET

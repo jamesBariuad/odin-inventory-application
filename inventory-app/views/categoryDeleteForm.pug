@@ -1,0 +1,18 @@
+extends layout 
+
+block content 
+    h1 Delete Category: #{category.name}
+    if products.length
+        p Delete the following products before deleting the category:
+        ul  
+            each product in products 
+                li
+                    a(href=product.url) #{product.name} 
+
+    else
+        p.text-danger #[strong Are you sure you want to delete category?] 
+
+        form(method="POST")
+            div.form-group
+                input#categoryid(type="hidden", name="categoryid", value=`${category._id}`)
+            button.btn.btn-danger(type="submit") Delete
