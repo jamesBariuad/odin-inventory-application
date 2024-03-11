@@ -1,0 +1,12 @@
+extends layout 
+
+block content 
+    h1 #{category.name}
+    p #{category.description}
+
+    ul 
+        hr  
+        ul
+            each item in productsInCategory 
+                li 
+                    a(href=item.url) #{item.name} 

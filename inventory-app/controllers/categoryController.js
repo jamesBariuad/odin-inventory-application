@@ -1,14 +1,31 @@
 const Category = require("../models/category");
+const Products = require('../models/product')
 const asyncHandler = require("express-async-handler");
 
 //display all categories
 exports.categoryList = asyncHandler(async (req, res, next) => {
-  res.send("not implemented yet");
+  const allCategories = await Category.find()
+  res.render("categoryList",{
+    title: "Categories",
+    categoryList : allCategories
+  })
+
 });
 
 //display detail of a specific category
 exports.categoryDetails = asyncHandler(async (req, res, next) => {
-  res.send("stops here");
+  const [productsInCategory, categoryDetails] = await Promise.all([
+    Products.find({category:req.params.id},"name"),
+    Category.findById(req.params.id)
+  ])
+
+  console.log(productsInCategory)
+  console.log(categoryDetails)
+
+  res.render("categoryDetails",{
+    productsInCategory: productsInCategory,
+    category: categoryDetails
+  })
 });
 
 //display category create form on GET
