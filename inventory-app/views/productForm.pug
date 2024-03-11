@@ -27,10 +27,10 @@ block content
             input#numberInStock.mb-2.form-control(type='number', min=0, placeholder='Enter a number', name="numberInStock", required, value=(undefined===product?"":product.numberInStock))
 
             label.mb-1(for="category") Product Category:
-            select.form-select.mb-5
-                option(selected) Choose a category
+            select#category.form-select.mb-5(name="category" ,required)
+                option(value="") Choose a category
                 each category in categoryList 
-                    option(value=category.name) #{category.name}     
+                    option(value=category._id) #{category.name}     
         input.btn.btn-primary(type="submit")
 
 
