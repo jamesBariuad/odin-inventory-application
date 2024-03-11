@@ -3,10 +3,13 @@ extends layout
 block content 
     h1 #{category.name}
     p #{category.description}
-
-    ul 
-        hr  
+    hr  
+    if productsInCategory.length
         ul
             each item in productsInCategory 
                 li 
                     a(href=item.url) #{item.name} 
+    else 
+        p There are no products in this category 
+        a(href="/inventory/product/create") Add Products+ 
+

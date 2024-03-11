@@ -1,41 +1,73 @@
 const Category = require("../models/category");
-const Products = require('../models/product')
+const Products = require("../models/product");
 const asyncHandler = require("express-async-handler");
+const { body, validationResult } = require("express-validator");
 
 //display all categories
 exports.categoryList = asyncHandler(async (req, res, next) => {
-  const allCategories = await Category.find()
-  res.render("categoryList",{
+  const allCategories = await Category.find();
+  res.render("categoryList", {
     title: "Categories",
-    categoryList : allCategories
-  })
-
+    categoryList: allCategories,
+  });
 });
 
 //display detail of a specific category
 exports.categoryDetails = asyncHandler(async (req, res, next) => {
   const [productsInCategory, categoryDetails] = await Promise.all([
-    Products.find({category:req.params.id},"name"),
-    Category.findById(req.params.id)
-  ])
+    Products.find({ category: req.params.id }, "name"),
+    Category.findById(req.params.id),
+  ]);
 
-  console.log(productsInCategory)
-  console.log(categoryDetails)
-
-  res.render("categoryDetails",{
+  res.render("categoryDetails", {
     productsInCategory: productsInCategory,
-    category: categoryDetails
-  })
+    category: categoryDetails,
+  });
 });
 
 //display category create form on GET
 exports.categoryCreateGet = asyncHandler(async (req, res, next) => {
-  res.send("why is not sending");
+  res.render("categoryForm");
 });
 //handle category create on POST
-exports.categoryCreatePost = asyncHandler(async (req, res, next) => {
-  res.send("not implementde create on post");
-});
+exports.categoryCreatePost = [
+  body("name", "Category must contain at least 3 characters")
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+  body("description", "Category description must contain at least 10 characters")
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    console.log(req.body);
+
+    const category = new Category({
+      name: req.body.name,
+      description: req.body.description,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("categoryForm", {
+        category: category,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const categoryExists = await Category.findOne({ name: req.body.name })
+        .collation({ locale: "en", strength: 2 })
+        .exec();
+
+      if (categoryExists) {
+        res.redirect(categoryExists.url);
+      } else {
+        await category.save();
+        res.redirect(category.url);
+      }
+    }
+  }),
+];
 
 //display category delete form on GET
 exports.categoryDeleteGet = asyncHandler(async (req, res, next) => {
