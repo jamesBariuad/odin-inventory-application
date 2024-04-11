@@ -27,7 +27,7 @@ exports.categoryDetails = asyncHandler(async (req, res, next) => {
 
 //display category create form on GET
 exports.categoryCreateGet = asyncHandler(async (req, res, next) => {
-  res.render("categoryForm");
+  res.render("categoryForm", { title: "Add a Product" });
 });
 //handle category create on POST
 exports.categoryCreatePost = [
@@ -35,7 +35,10 @@ exports.categoryCreatePost = [
     .trim()
     .isLength({ min: 3 })
     .escape(),
-  body("description", "Category description must contain at least 10 characters")
+  body(
+    "description",
+    "Category description must contain at least 10 characters"
+  )
     .trim()
     .isLength({ min: 3 })
     .escape(),
@@ -49,6 +52,7 @@ exports.categoryCreatePost = [
 
     if (!errors.isEmpty()) {
       res.render("categoryForm", {
+        title: "Add a product",
         category: category,
         errors: errors.array(),
       });
@@ -71,29 +75,73 @@ exports.categoryCreatePost = [
 //display category delete form on GET
 exports.categoryDeleteGet = asyncHandler(async (req, res, next) => {
   const [productsWithChosenCategory, chosenCategory] = await Promise.all([
-    Products.find({category:req.params.id}),
-    Category.findById(req.params.id)
-  ])
+    Products.find({ category: req.params.id }),
+    Category.findById(req.params.id),
+  ]);
 
-
-    res.render("categoryDeleteForm",{
-      products: productsWithChosenCategory,
-      category: chosenCategory
-    })
+  res.render("categoryDeleteForm", {
+    products: productsWithChosenCategory,
+    category: chosenCategory,
+  });
 });
 
 //handle category delete on POST
 exports.categoryDeletePost = asyncHandler(async (req, res, next) => {
-  await Category.findByIdAndDelete(req.params.id)
-  res.redirect("/inventory/categories")
+  await Category.findByIdAndDelete(req.params.id);
+  res.redirect("/inventory/categories");
 });
 
 //display category update form on GET
 exports.categoryUpdateGet = asyncHandler(async (req, res, next) => {
-  res.send("not implementde update on get");
+  const chosenCategory = await Category.findById(req.params.id);
+  res.render("categoryForm", {
+    title: "Update Category",
+    category: chosenCategory,
+  });
 });
 
 //handle category update on POST
-exports.categoryUpdatePost = asyncHandler(async (req, res, next) => {
-  res.send("not implementde update on post");
-});
+exports.categoryUpdatePost = [
+  body("name", "Category name must containt at least 3 characters")
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+  body(
+    "description",
+    "Category description must containt at least 3 characters"
+  )
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const category = new Category({
+      name: req.body.name,
+      description: req.body.description,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("categoryForm", {
+        category: category,
+        error: errors.array(),
+      });
+      return;
+    } else {
+      const categoryExists = await Category.findOne({ name: req.body.name });
+
+      if (categoryExists) {
+        res.redirect(categoryExists.url);
+      } else {
+        const updatedCategory = await Category.findByIdAndUpdate(
+          req.params.id,
+          category
+        );
+        console.log();
+        res.redirect(category.url);
+      }
+    }
+  }),
+];
