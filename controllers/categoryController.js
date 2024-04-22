@@ -102,13 +102,13 @@ exports.categoryUpdateGet = asyncHandler(async (req, res, next) => {
 
 //handle category update on POST
 exports.categoryUpdatePost = [
-  body("name", "Category name must containt at least 3 characters")
+  body("name", "Category name must contain at least 3 characters")
     .trim()
     .isLength({ min: 3 })
     .escape(),
   body(
     "description",
-    "Category description must containt at least 3 characters"
+    "Category description must contain at least 3 characters"
   )
     .trim()
     .isLength({ min: 3 })
@@ -131,15 +131,17 @@ exports.categoryUpdatePost = [
       return;
     } else {
       const categoryExists = await Category.findOne({ name: req.body.name });
-
-      if (categoryExists) {
+      const currentDescription = await Category.findOne({description: req.body.description})
+      if (categoryExists ) {
+        if(currentDescription!== req.body.description){
+          await Category.findByIdAndUpdate(req.params.id, category)
+        }
         res.redirect(categoryExists.url);
       } else {
         const updatedCategory = await Category.findByIdAndUpdate(
           req.params.id,
           category
         );
-        console.log();
         res.redirect(category.url);
       }
     }

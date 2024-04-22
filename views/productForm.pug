@@ -1,7 +1,7 @@
 extends layout 
 
 block content 
-    h1 Add a Product 
+    h1 #{title}  
 
     form(method="post")
         div.form-group
@@ -13,7 +13,11 @@ block content
             input#price.mb-2.form-control(type='number', min=1, placeholder='Enter price', name="price", required, value=(undefined===product?"":product.price)) 
 
             label.mb-1(for="description") Description:
-            textarea#description.mb-2.form-control(type='text', placeholder='Enter description', name="description", required, value=(undefined===product?"":product.description))
+            if product===undefined
+                textarea#description.mb-2.form-control(type='text', placeholder='Enter description', name="description", required)
+            else
+                textarea#description.mb-2.form-control(type='text', placeholder='Enter description', name="description", required)
+                    |#{product.description}
 
             label.mb-1(for="numberInStock") Number in Stock:
             input#numberInStock.mb-2.form-control(type='number', min=0, placeholder='Enter a number', name="numberInStock", required, value=(undefined===product?"":product.numberInStock))

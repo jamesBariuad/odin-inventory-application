@@ -2,6 +2,10 @@ const Product = require("../models/product");
 const Category = require("../models/category");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
+const { categoryList } = require("./categoryController");
+const category = require("../models/category");
+const { error } = require("console");
+const product = require("../models/product");
 
 //homepage
 exports.index = asyncHandler(async (req, res, next) => {
@@ -120,10 +124,58 @@ exports.productDeletePost = asyncHandler(async (req, res, next) => {
 
 //display product update form on GET
 exports.productUpdateGet = asyncHandler(async (req, res, next) => {
-  res.send("not implementde update on get");
+  const chosenProduct = await Product.findById(req.params.id)
+  const categories = await Category.find()
+  res.render("productForm",{
+    title: "Update product",
+    product: chosenProduct,
+    categoryList: categories
+  })
 });
 
 //handle product update on POST
-exports.productUpdatePost = asyncHandler(async (req, res, next) => {
-  res.send("not implementde update on post");
-});
+exports.productUpdatePost = [
+  body("name","Product name should contain at least 3 characters").trim().isLength({min:3}).escape(),
+  body("description","Product description should contain at least 3 characters").trim().isLength({min:3}).escape(),
+
+  asyncHandler(async(req,res,next)=>{
+    const errors = validationResult(req)
+    const categories = await Category.find()
+
+    const updatedProduct = new Product({
+      name:req.body.name,
+      description: req.body.description,
+      price:req.body.price,
+      numberInStock: req.body.numberInStock,
+      category:req.params.category,
+      _id: req.params.id
+    })
+
+    console.log(updatedProduct)
+
+    if(!errors.isEmpty()){
+      res.render("productForm",{
+        errors: errors.array(),
+        product: updatedProduct,
+        categoryList: categories
+      }
+    )
+    return
+    }else{
+      const isDuplicate = await Product.find({name: updatedProduct.name})
+      console.log(isDuplicate)
+      if (isDuplicate){
+        res.render("productForm",{
+          title: "Update product",
+          product: updatedProduct,
+          categoryList: categories
+        }
+      )
+      }else{
+        await Product.findByIdAndUpdate(req.params.id, updatedProduct)
+        res.redirect(updatedProduct.url)
+      }
+
+    }
+  })
+]
